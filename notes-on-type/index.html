@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notes on Type — Victor</title>
+<meta name="description" content="Things I keep relearning about typography">
+<meta property="og:title" content="Notes on Type">
+<meta property="og:description" content="Things I keep relearning about typography">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://example.org/notes-on-type/">
+
+<link rel="stylesheet" href="/css/bundle.min.7f904f4af98f02b6ce61ce93978622b8b6806c5086530a2bec9836b8de335e20.css">
+
+</head>
+<body>
+  <nav>
+  <a href="/">Victor</a>
+</nav>
+
+  <main id="swup" class="transition-main">
+    
+<article>
+  <header>
+    <h1>Notes on Type</h1>
+    <p class="lead">Things I keep relearning about typography</p>
+    <p class="post-date">November 18, 2024</p>
+  </header>
+  <div class="content">
+    <p>Line length matters more than almost anything else. Around 65 characters is comfortable for sustained reading. Wider than that and the eye loses the return. Narrower and the rhythm becomes choppy. Most layout problems that look like type problems are actually line-length problems.</p>
+<p>Tracking is usually the wrong solution. When type feels wrong at a given size, the instinct is to open it up. Sometimes that&rsquo;s right — all-caps settings almost always need it. But in body copy, adding tracking often just makes the problem harder to see rather than fixing it.</p>
+<p>Hierarchy should be established with as few variables as possible. Size first, then weight, then color. If you need more than three levels, the content structure probably needs work.</p>
+<p>The typefaces I return to most aren&rsquo;t the most interesting ones. They&rsquo;re the ones that stay out of the way — that make the words easy to read and don&rsquo;t ask for attention themselves. That restraint is harder to achieve than it looks.</p>
+
+  </div>
+</article>
+
+  </main>
+  <script type="module">
+    import Swup from 'https://esm.sh/swup@4';
+    const swup = new Swup();
+
+    function initLoadMore() {
+      document.querySelectorAll('.load-more-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.closest('section').querySelectorAll('.post-hidden').forEach(el => {
+            el.classList.remove('post-hidden');
+          });
+          btn.remove();
+        });
+      });
+    }
+
+    initLoadMore();
+    swup.hooks.on('page:view', initLoadMore);
+  </script>
+</body>
+</html>

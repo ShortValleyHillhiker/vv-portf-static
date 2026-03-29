@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Website Redesign — Victor</title>
+<meta name="description" content="Digital presence for an independent publisher">
+<meta property="og:title" content="Website Redesign">
+<meta property="og:description" content="Digital presence for an independent publisher">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://example.org/website-redesign/">
+
+<link rel="stylesheet" href="/css/bundle.min.7f904f4af98f02b6ce61ce93978622b8b6806c5086530a2bec9836b8de335e20.css">
+
+</head>
+<body>
+  <nav>
+  <a href="/">Victor</a>
+</nav>
+
+  <main id="swup" class="transition-main">
+    
+<article>
+  <header>
+    <h1>Website Redesign</h1>
+    <p class="lead">Digital presence for an independent publisher</p>
+    
+  </header>
+  <div class="content">
+    <p>The publisher had been running on a template for six years. The content had outgrown it — a catalog of over four hundred titles, a quarterly journal, and a reading list that editors updated irregularly. The site was doing too many things and none of them well.</p>
+<p>The redesign started by cutting. The reading list became a newsletter. The journal got its own subdomain. What remained was a clean catalog and a handful of editorial pages — the publisher&rsquo;s voice, undiluted.</p>
+<p>Typographically, we leaned on the books themselves. Title pages from the back catalog informed the hierarchy. The grid is asymmetric and intentionally print-influenced, which felt right for a publisher that still cares about paper.</p>
+
+  </div>
+</article>
+
+  </main>
+  <script type="module">
+    import Swup from 'https://esm.sh/swup@4';
+    const swup = new Swup();
+
+    function initLoadMore() {
+      document.querySelectorAll('.load-more-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.closest('section').querySelectorAll('.post-hidden').forEach(el => {
+            el.classList.remove('post-hidden');
+          });
+          btn.remove();
+        });
+      });
+    }
+
+    initLoadMore();
+    swup.hooks.on('page:view', initLoadMore);
+  </script>
+</body>
+</html>

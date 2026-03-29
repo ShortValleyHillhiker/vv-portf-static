@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campaign Direction — Victor</title>
+<meta name="description" content="Launch campaign for a considered product">
+<meta property="og:title" content="Campaign Direction">
+<meta property="og:description" content="Launch campaign for a considered product">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://example.org/campaign-direction/">
+
+<link rel="stylesheet" href="/css/bundle.min.7f904f4af98f02b6ce61ce93978622b8b6806c5086530a2bec9836b8de335e20.css">
+
+</head>
+<body>
+  <nav>
+  <a href="/">Victor</a>
+</nav>
+
+  <main id="swup" class="transition-main">
+    
+<article>
+  <header>
+    <h1>Campaign Direction</h1>
+    <p class="lead">Launch campaign for a considered product</p>
+    
+  </header>
+  <div class="content">
+    <p>The product had been in development for three years. The team had thought carefully about every material choice, every tolerance, every edge. The campaign had to earn that seriousness without being ponderous about it.</p>
+<p>We shot over two days in a workshop space that felt lived-in without being staged. Natural light, long lenses, slow film. The brief to the photographer was to treat the objects like portraits — find the specific, not the general.</p>
+<p>Copy was written last, after the images existed. It follows the photographs: quiet, specific, unhurried.</p>
+
+  </div>
+</article>
+
+  </main>
+  <script type="module">
+    import Swup from 'https://esm.sh/swup@4';
+    const swup = new Swup();
+
+    function initLoadMore() {
+      document.querySelectorAll('.load-more-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.closest('section').querySelectorAll('.post-hidden').forEach(el => {
+            el.classList.remove('post-hidden');
+          });
+          btn.remove();
+        });
+      });
+    }
+
+    initLoadMore();
+    swup.hooks.on('page:view', initLoadMore);
+  </script>
+</body>
+</html>

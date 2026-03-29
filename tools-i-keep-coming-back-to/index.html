@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tools I Keep Coming Back To — Victor</title>
+<meta name="description" content="A short and partial list">
+<meta property="og:title" content="Tools I Keep Coming Back To">
+<meta property="og:description" content="A short and partial list">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://example.org/tools-i-keep-coming-back-to/">
+
+<link rel="stylesheet" href="/css/bundle.min.7f904f4af98f02b6ce61ce93978622b8b6806c5086530a2bec9836b8de335e20.css">
+
+</head>
+<body>
+  <nav>
+  <a href="/">Victor</a>
+</nav>
+
+  <main id="swup" class="transition-main">
+    
+<article>
+  <header>
+    <h1>Tools I Keep Coming Back To</h1>
+    <p class="lead">A short and partial list</p>
+    <p class="post-date">January 5, 2025</p>
+  </header>
+  <div class="content">
+    <p><strong>Figma</strong> for most things, but not because it&rsquo;s the best tool for any one thing. It&rsquo;s the best tool for working with other people, which turns out to matter more.</p>
+<p><strong>iA Writer</strong> when I need to think through something in prose. The lack of options is the feature. I&rsquo;ve tried to replace it several times and always come back.</p>
+<p><strong>A physical notebook.</strong> Unlined, medium size, whatever pen is nearby. I don&rsquo;t have a system. The point is that it&rsquo;s slow — slow enough that only the things worth writing get written.</p>
+<p><strong>Terminal + a text editor</strong> for anything code-adjacent. I&rsquo;ve gone through phases with different editors. Right now it&rsquo;s whatever is open.</p>
+<p>The pattern I notice: the tools I keep are the ones that don&rsquo;t try to do everything. The ones that know what they are.</p>
+
+  </div>
+</article>
+
+  </main>
+  <script type="module">
+    import Swup from 'https://esm.sh/swup@4';
+    const swup = new Swup();
+
+    function initLoadMore() {
+      document.querySelectorAll('.load-more-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.closest('section').querySelectorAll('.post-hidden').forEach(el => {
+            el.classList.remove('post-hidden');
+          });
+          btn.remove();
+        });
+      });
+    }
+
+    initLoadMore();
+    swup.hooks.on('page:view', initLoadMore);
+  </script>
+</body>
+</html>

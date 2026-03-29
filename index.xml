@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Victor</title>
+    <link>https://example.org/</link>
+    <description>Recent content on Victor</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 10 Feb 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>On Craft</title>
+      <link>https://example.org/on-craft/</link>
+      <pubDate>Mon, 10 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>https://example.org/on-craft/</guid>
+      <description>&lt;p&gt;There&amp;rsquo;s a version of craft that&amp;rsquo;s about technique — knowing the rules well enough to follow them, then well enough to break them. That version is learnable and mostly useful.&lt;/p&gt;&#xA;&lt;p&gt;The version I find harder to talk about is the one that happens at the end of a project, when the work is good enough to ship but not yet right. The temptation is to call it done. The client is happy. The deadline is real. And yet.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Brand Identity</title>
+      <link>https://example.org/brand-identity/</link>
+      <pubDate>Wed, 15 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>https://example.org/brand-identity/</guid>
+      <description>&lt;p&gt;The brief was simple on paper: create a mark that felt handmade without looking homemade. The studio worked across ceramics, textiles, and print — disparate disciplines that needed a single thread to hold them together.&lt;/p&gt;&#xA;&lt;p&gt;We started with process. Watching how objects were made in the studio — the deliberate pressure of a thumb into clay, the way linen holds a crease — gave us a visual language grounded in material honesty. The identity emerged from that, not from the brief.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Tools I Keep Coming Back To</title>
+      <link>https://example.org/tools-i-keep-coming-back-to/</link>
+      <pubDate>Sun, 05 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>https://example.org/tools-i-keep-coming-back-to/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;Figma&lt;/strong&gt; for most things, but not because it&amp;rsquo;s the best tool for any one thing. It&amp;rsquo;s the best tool for working with other people, which turns out to matter more.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;iA Writer&lt;/strong&gt; when I need to think through something in prose. The lack of options is the feature. I&amp;rsquo;ve tried to replace it several times and always come back.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;A physical notebook.&lt;/strong&gt; Unlined, medium size, whatever pen is nearby. I don&amp;rsquo;t have a system. The point is that it&amp;rsquo;s slow — slow enough that only the things worth writing get written.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Notes on Type</title>
+      <link>https://example.org/notes-on-type/</link>
+      <pubDate>Mon, 18 Nov 2024 00:00:00 +0000</pubDate>
+      <guid>https://example.org/notes-on-type/</guid>
+      <description>&lt;p&gt;Line length matters more than almost anything else. Around 65 characters is comfortable for sustained reading. Wider than that and the eye loses the return. Narrower and the rhythm becomes choppy. Most layout problems that look like type problems are actually line-length problems.&lt;/p&gt;&#xA;&lt;p&gt;Tracking is usually the wrong solution. When type feels wrong at a given size, the instinct is to open it up. Sometimes that&amp;rsquo;s right — all-caps settings almost always need it. But in body copy, adding tracking often just makes the problem harder to see rather than fixing it.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Website Redesign</title>
+      <link>https://example.org/website-redesign/</link>
+      <pubDate>Tue, 01 Oct 2024 00:00:00 +0000</pubDate>
+      <guid>https://example.org/website-redesign/</guid>
+      <description>&lt;p&gt;The publisher had been running on a template for six years. The content had outgrown it — a catalog of over four hundred titles, a quarterly journal, and a reading list that editors updated irregularly. The site was doing too many things and none of them well.&lt;/p&gt;&#xA;&lt;p&gt;The redesign started by cutting. The reading list became a newsletter. The journal got its own subdomain. What remained was a clean catalog and a handful of editorial pages — the publisher&amp;rsquo;s voice, undiluted.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Campaign Direction</title>
+      <link>https://example.org/campaign-direction/</link>
+      <pubDate>Thu, 20 Jun 2024 00:00:00 +0000</pubDate>
+      <guid>https://example.org/campaign-direction/</guid>
+      <description>&lt;p&gt;The product had been in development for three years. The team had thought carefully about every material choice, every tolerance, every edge. The campaign had to earn that seriousness without being ponderous about it.&lt;/p&gt;&#xA;&lt;p&gt;We shot over two days in a workshop space that felt lived-in without being staged. Natural light, long lenses, slow film. The brief to the photographer was to treat the objects like portraits — find the specific, not the general.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

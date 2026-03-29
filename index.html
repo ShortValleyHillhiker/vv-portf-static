@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta name="generator" content="Hugo 0.159.1">
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Victor</title>
+
+<meta property="og:title" content="Victor">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://example.org/">
+
+<link rel="stylesheet" href="/css/bundle.min.7f904f4af98f02b6ce61ce93978622b8b6806c5086530a2bec9836b8de335e20.css">
+
+</head>
+<body>
+  <nav>
+  <a href="/">Victor</a>
+</nav>
+
+  <main id="swup" class="transition-main">
+    
+
+
+
+<section class="work">
+  <h2>Work</h2>
+  <ul>
+    
+    <li>
+      <a href="/brand-identity/">
+        <span class="work-image">
+          <img src="/images/work/brand-identity.svg" alt="Brand Identity">
+        </span>
+        <span class="post-row">
+          <span class="post-title">Brand Identity</span>
+          <span class="post-meta">Visual identity for a boutique studio</span>
+        </span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/website-redesign/">
+        <span class="work-image">
+          <img src="/images/work/website-redesign.svg" alt="Website Redesign">
+        </span>
+        <span class="post-row">
+          <span class="post-title">Website Redesign</span>
+          <span class="post-meta">Digital presence for an independent publisher</span>
+        </span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/campaign-direction/">
+        <span class="work-image">
+          <img src="/images/work/campaign.svg" alt="Campaign Direction">
+        </span>
+        <span class="post-row">
+          <span class="post-title">Campaign Direction</span>
+          <span class="post-meta">Launch campaign for a considered product</span>
+        </span>
+      </a>
+    </li>
+    
+  </ul>
+  
+</section>
+
+<section class="writing">
+  <h2>Writing</h2>
+  <ul>
+    
+    <li>
+      <a href="/on-craft/">
+        <span class="post-title">On Craft</span>
+        <span class="post-meta">What it means to finish something properly</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/tools-i-keep-coming-back-to/">
+        <span class="post-title">Tools I Keep Coming Back To</span>
+        <span class="post-meta">A short and partial list</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="/notes-on-type/">
+        <span class="post-title">Notes on Type</span>
+        <span class="post-meta">Things I keep relearning about typography</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+</section>
+
+  </main>
+  <script type="module">
+    import Swup from 'https://esm.sh/swup@4';
+    const swup = new Swup();
+
+    function initLoadMore() {
+      document.querySelectorAll('.load-more-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.closest('section').querySelectorAll('.post-hidden').forEach(el => {
+            el.classList.remove('post-hidden');
+          });
+          btn.remove();
+        });
+      });
+    }
+
+    initLoadMore();
+    swup.hooks.on('page:view', initLoadMore);
+  </script>
+</body>
+</html>
