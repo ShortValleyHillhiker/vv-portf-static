@@ -2,25 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://vennerstrom.se/on-designing-for-clarity/</loc>
+    <loc>http://localhost:62639/on-designing-for-clarity/</loc>
     <lastmod>2025-11-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://vennerstrom.se/</loc>
+    <loc>http://localhost:62639/</loc>
     <lastmod>2025-11-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://vennerstrom.se/konfetti-brand-identity/</loc>
+    <loc>http://localhost:62639/konfetti-brand-identity/</loc>
     <lastmod>2025-10-12T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://vennerstrom.se/type-as-tone/</loc>
+    <loc>http://localhost:62639/type-as-tone/</loc>
     <lastmod>2025-08-19T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://vennerstrom.se/summer-campaign-2024/</loc>
+    <loc>http://localhost:62639/summer-campaign-2024/</loc>
     <lastmod>2025-06-30T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://vennerstrom.se/working-in-the-open/</loc>
+    <loc>http://localhost:62639/working-in-the-open/</loc>
     <lastmod>2025-05-07T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://vennerstrom.se/studio-website-redesign/</loc>
+    <loc>http://localhost:62639/studio-website-redesign/</loc>
     <lastmod>2025-03-18T00:00:00+00:00</lastmod>
   </url>
 </urlset>

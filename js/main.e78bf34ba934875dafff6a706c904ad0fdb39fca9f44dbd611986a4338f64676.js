@@ -3,6 +3,6 @@
     <span class="post-title">${e.title}</span>
     ${e.category?`<span class="post-meta">${e.category}</span>`:""}
   `,t}function Nt(e){let t=document.createElement("a");t.href=e.url,t.className="blog-item";let s=new Date(e.date).toLocaleDateString("en-GB",{month:"short",year:"numeric"});return t.innerHTML=`
-    <span class="post-title">${e.title}</span>
     <span class="post-meta">${s}</span>
+    <span class="post-title">${e.title}</span>
   `,t}function J(){document.querySelectorAll(".load-more-btn").forEach(e=>{e.addEventListener("click",async()=>{let t=e.dataset.type,s=parseInt(e.dataset.loaded,10),i=e.closest("section").querySelector('[class*="listing-items"]'),a=(await It()).filter(h=>h.type===t),o=a[s];if(!o){e.remove();return}i.appendChild(t==="work"?Ot(o):Nt(o));let c=s+1;e.dataset.loaded=c,c>=a.length&&e.remove()})})}function X(){let e=document.querySelector(".option-slide"),t=document.querySelector(".option-slider"),s=t?[...t.querySelectorAll("p")]:[],n=document.querySelectorAll(".option-display > *");if(!t||!s.length)return;let i=()=>{let{scrollLeft:a,scrollWidth:o,clientWidth:c}=t;e.classList.toggle("mask-left",a>4),e.classList.toggle("mask-right",a<o-c-4)},r=a=>{s.forEach((o,c)=>o.classList.toggle("selected",c===a)),n.forEach((o,c)=>o.classList.toggle("selected",c===a))};s.forEach((a,o)=>{a.addEventListener("click",()=>r(o))}),t.addEventListener("scroll",i,{passive:!0}),i()}var Rt=new H({plugins:[new O],containers:["#swup"]});lt();ct();ht();Rt.hooks.on("page:view",()=>{G(),K(),z(),J(),X()});G();K();z();J();X();})();
