@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dot Grid</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; background: #1e1e1e; overflow: hidden; touch-action: none; }
+    canvas { position: fixed; inset: 0; display: block; }
+    #label {
+      position: fixed;
+      bottom: 20px;
+      left: 1rem;
+      right: 1rem;
+      color: #f4f4f4;
+      font: 11px/1 monospace;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      pointer-events: none;
+      /* white-space: nowrap; */
+      padding: .25rem .5rem;
+      background-color: #1e1e1e;
+    text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="out"></canvas>
+  <div id="label">drag to ripple · space for next image -- Cleanup & refactor · Make modular · Reloading the page with high resolution lags but loading page in smaller viewport and then scaling up doesnt?</div>
+
+  <script>
+    /* ─────────────────────────────────────────────────────
+       Config
+    ───────────────────────────────────────────────────── */
+    const CELL         = 16;
+    const MAX_DOT_R    = CELL * 0.525;
+    const MIN_DOT_R    = 0.15;
+    const RING_SPEED   = 333;
+    const RING_WIDTH   = 55;
+    const RING_BOOST   = 122;
+    const RING_FALLOFF = 0.75;  // seconds — time constant for exponential fade (e^(-age/falloff))
+    const RING_MIN_STR = 4;    // terminate when strength drops below this
+    const FADE_MS      = 2400;
+    const TARGET_FPS   = 12;
+    const FRAME_MS     = 1000 / TARGET_FPS;
+    const MAX_RIPPLES  = 20;
+    const SPAWN_DIST   = 14;
+    const SPAWN_DIST2  = SPAWN_DIST * SPAWN_DIST; // skip sqrt in pointermove
+    const CLICK_DELAY  = 120;
+    const LUM_SKIP     = 2;            // skip cells below this luminance
+
+    /* ─────────────────────────────────────────────────────
+       Cosine falloff lookup table — replaces Math.cos in hot path
+    ───────────────────────────────────────────────────── */
+    const LUT_N = 64;
+    const falloffLUT = new Float32Array(LUT_N + 1);
+    for (let i = 0; i <= LUT_N; i++)
+      falloffLUT[i] = (1 + Math.cos(Math.PI * i / LUT_N)) * 0.5;
+
+    /* ─────────────────────────────────────────────────────
+       Pre-allocated draw-command buffers — reused every frame, zero GC
+       Layout per entry: [cx, cy, r]
+    ───────────────────────────────────────────────────── */
+    const MAX_CELLS = 300 * 200;
+    const triBuf = new Float32Array(MAX_CELLS * 3);
+    const cirBuf = new Float32Array(MAX_CELLS * 3);
+    const sqrBuf = new Float32Array(MAX_CELLS * 3);
+
+    /* ─────────────────────────────────────────────────────
+       Canvas
+    ───────────────────────────────────────────────────── */
+    const out    = document.getElementById('out');
+    const outCtx = out.getContext('2d');
+
+    const src    = document.createElement('canvas');
+    const srcCtx = src.getContext('2d');
+
+    let cols, rows;
+    let currentImg  = null;
+    let fadeStart   = -Infinity;
+
+    // Pre-baked per-cell data — rebuilt once on image load / resize, not per frame
+    let cachedLum   = null;  // Float32Array — luminance 0–255
+    let cachedShape = null;  // Uint8Array   — base shape: 0=tri 1=cir 2=sqr
+
+    function resize() {
+      cols = Math.floor(window.innerWidth  / CELL);
+      rows = Math.floor(window.innerHeight / CELL);
+
+      out.width  = window.innerWidth;
+      out.height = window.innerHeight;
+      src.width  = cols;
+      src.height = rows;
+
+      if (currentImg) cachePixels();
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    /* ─────────────────────────────────────────────────────
+       Image loading — Lorem Picsum
+    ───────────────────────────────────────────────────── */
+    function cachePixels() {
+      const scale = Math.max(cols / currentImg.width, rows / currentImg.height);
+      const dw = currentImg.width  * scale;
+      const dh = currentImg.height * scale;
+      const dx = (cols - dw) / 2;
+      const dy = (rows - dh) / 2;
+
+      srcCtx.fillStyle = '#1e1e1e';
+      srcCtx.fillRect(0, 0, cols, rows);
+      srcCtx.drawImage(currentImg, dx, dy, dw, dh);
+
+      const raw = srcCtx.getImageData(0, 0, cols, rows).data;
+      const n   = cols * rows;
+
+      cachedLum   = new Float32Array(n);
+      cachedShape = new Uint8Array(n);
+
+      // Bake luminance + base shape once — no per-frame channel math
+      for (let i = 0; i < n; i++) {
+        const p   = i * 4;
+        const lum = 0.21 * raw[p] + 0.72 * raw[p + 1] + 0.07 * raw[p + 2];
+        cachedLum[i]   = lum;
+        cachedShape[i] = lum < 120 ? 0 : lum < 170 ? 1 : 2;
+      }
+    }
+
+    function loadImage() {
+      const seed = Math.floor(Math.random() * 1000);
+      const img  = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        currentImg = img;
+        cachePixels();
+        fadeStart = performance.now();
+      };
+      img.src = `https://picsum.photos/seed/${seed}/1200/800`;
+    }
+
+    window.addEventListener('keydown', e => { if (e.code === 'Space') loadImage(); });
+    loadImage();
+
+    /* ─────────────────────────────────────────────────────
+       Ripple system
+    ───────────────────────────────────────────────────── */
+    const ripples = [];
+
+    function addRipple(x, y) {
+      if (ripples.length >= MAX_RIPPLES) ripples.shift();
+      ripples.push({ x, y, r: 0, age: 0, strength: RING_BOOST,
+                     minCol: 0, maxCol: 0, minRow: 0, maxRow: 0 });
+    }
+
+    let dragging    = false;
+    let lastSpawnX  = 0;
+    let lastSpawnY  = 0;
+    let lastClickTs = -Infinity;
+
+    window.addEventListener('pointerdown', e => {
+      dragging   = true;
+      lastSpawnX = e.clientX;
+      lastSpawnY = e.clientY;
+      const now  = performance.now();
+      if (now - lastClickTs < CLICK_DELAY) return;
+      lastClickTs = now;
+      addRipple(e.clientX, e.clientY);
+    });
+
+    window.addEventListener('pointermove', e => {
+      if (!dragging) return;
+      const now = performance.now();
+      if (now - lastClickTs < CLICK_DELAY) return;
+      const dx = e.clientX - lastSpawnX;
+      const dy = e.clientY - lastSpawnY;
+      // Squared comparison avoids sqrt entirely
+      if (dx * dx + dy * dy >= SPAWN_DIST2) {
+        lastClickTs = now;
+        addRipple(e.clientX, e.clientY);
+        lastSpawnX = e.clientX;
+        lastSpawnY = e.clientY;
+      }
+    });
+
+    window.addEventListener('pointerup',     () => { dragging = false; });
+    window.addEventListener('pointercancel', () => { dragging = false; });
+
+    /* ─────────────────────────────────────────────────────
+       Render loop — capped at TARGET_FPS
+    ───────────────────────────────────────────────────── */
+    let lastRenderTs = 0;
+    const TAU = Math.PI * 2;
+
+    function render(ts) {
+      requestAnimationFrame(render);
+
+      if (ts - lastRenderTs < FRAME_MS) return;
+      const dt = Math.min((ts - lastRenderTs) * 0.001, 0.15);
+      lastRenderTs = ts;
+
+      // ── Advance ripples + precompute strength / cell bbox ────────────────
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        const rp = ripples[i];
+        rp.r       += RING_SPEED * dt;
+        rp.age     += dt;
+        rp.strength = RING_BOOST * Math.exp(-rp.age / RING_FALLOFF);
+        if (rp.strength < RING_MIN_STR) { ripples.splice(i, 1); continue; }
+
+        const outer = rp.r + RING_WIDTH;
+        rp.minCol = Math.max(0,        Math.floor((rp.x - outer) / CELL));
+        rp.maxCol = Math.min(cols - 1, Math.ceil( (rp.x + outer) / CELL));
+        rp.minRow = Math.max(0,        Math.floor((rp.y - outer) / CELL));
+        rp.maxRow = Math.min(rows - 1, Math.ceil( (rp.y + outer) / CELL));
+      }
+
+      const fade = Math.min(1, (ts - fadeStart) / FADE_MS);
+
+      outCtx.fillStyle = '#1e1e1e';
+      outCtx.fillRect(0, 0, out.width, out.height);
+      outCtx.fillStyle = '#f4f4f4';
+
+      // Reset counters — buffers pre-allocated, no allocation here
+      let triN = 0, cirN = 0, sqrN = 0;
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const cellIdx = row * cols + col;
+
+          // Single float read — luminance math done at load time
+          let lum     = cachedLum ? cachedLum[cellIdx] * fade : 0;
+          const baseLum = lum;
+
+          // Ripple contributions — bbox-gated, LUT falloff, manual sqrt
+          for (const rp of ripples) {
+            if (col < rp.minCol || col > rp.maxCol ||
+                row < rp.minRow || row > rp.maxRow) continue;
+
+            const cx = col * CELL + CELL * 0.5;
+            const cy = row * CELL + CELL * 0.5;
+            const dx = cx - rp.x, dy = cy - rp.y;
+            const ringDist = Math.abs(Math.sqrt(dx * dx + dy * dy) - rp.r);
+
+            if (ringDist < RING_WIDTH) {
+              // Table lookup — no Math.cos
+              const li = (ringDist / RING_WIDTH * LUT_N) | 0;
+              lum = Math.min(255, lum + rp.strength * falloffLUT[li]);
+            }
+          }
+
+          // Skip cells too dark to draw — no path ops, no buffer writes
+          if (lum < LUM_SKIP) continue;
+
+          const dotR  = Math.max(MIN_DOT_R, MAX_DOT_R * (lum / 255));
+          const boost = lum - baseLum;
+
+          // Shape randomisation fades with boost strength — no hard binary flip.
+          // At full boost (≥40) shapes are fully random; at zero they are base shapes.
+          const shape = (boost > 0 && Math.random() < boost / 40)
+            ? (Math.random() * 3) | 0
+            : cachedShape[cellIdx];
+
+          const cx = col * CELL + CELL * 0.5;
+          const cy = row * CELL + CELL * 0.5;
+
+          if (shape === 0) {
+            triBuf[triN++] = cx; triBuf[triN++] = cy; triBuf[triN++] = dotR;
+          } else if (shape === 1) {
+            cirBuf[cirN++] = cx; cirBuf[cirN++] = cy; cirBuf[cirN++] = dotR;
+          } else {
+            sqrBuf[sqrN++] = cx; sqrBuf[sqrN++] = cy; sqrBuf[sqrN++] = dotR;
+          }
+        }
+      }
+
+      // ── Draw — three beginPath/fill passes, zero allocation ──────────────
+      outCtx.beginPath();
+      for (let i = 0; i < triN; i += 3) {
+        const cx = triBuf[i], cy = triBuf[i + 1], r = triBuf[i + 2];
+        outCtx.moveTo(cx,             cy - r);
+        outCtx.lineTo(cx + r * 0.866, cy + r * 0.5);
+        outCtx.lineTo(cx - r * 0.866, cy + r * 0.5);
+        outCtx.closePath();
+      }
+      outCtx.fill();
+
+      outCtx.beginPath();
+      for (let i = 0; i < cirN; i += 3) {
+        const cx = cirBuf[i], cy = cirBuf[i + 1], r = cirBuf[i + 2];
+        outCtx.moveTo(cx + r, cy);
+        outCtx.arc(cx, cy, r, 0, TAU);
+      }
+      outCtx.fill();
+
+      outCtx.beginPath();
+      for (let i = 0; i < sqrN; i += 3) {
+        const cx = sqrBuf[i], cy = sqrBuf[i + 1], r = sqrBuf[i + 2];
+        const s = r * 0.88;
+        outCtx.moveTo(cx - s, cy - s);
+        outCtx.lineTo(cx + s, cy - s);
+        outCtx.lineTo(cx + s, cy + s);
+        outCtx.lineTo(cx - s, cy + s);
+        outCtx.closePath();
+      }
+      outCtx.fill();
+    }
+
+    requestAnimationFrame(render);
+  </script>
+</body>
+</html>
