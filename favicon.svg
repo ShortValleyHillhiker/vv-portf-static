@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    rect.ink { fill: #1c1c1c; }
+    @media (prefers-color-scheme: dark) {
+      rect.ink { fill: #eee; }
+    }
+  </style>
+  <!-- The HUD grid mark: three rules, same motif as the grid-overlay toggle. -->
+  <rect class="ink" x="5"  y="4" width="4" height="24"/>
+  <rect class="ink" x="14" y="4" width="4" height="24"/>
+  <rect class="ink" x="23" y="4" width="4" height="24"/>
+</svg>
